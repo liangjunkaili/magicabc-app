@@ -3,6 +3,7 @@ package com.magicabc.magicabcapp.controller;
 import com.magicabc.magicabcapp.bean.User;
 import com.magicabc.magicabcapp.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,5 +20,10 @@ public class UserController {
         for (User u:userList){
             System.out.println(u.getUsername()+"----"+u.getUserphone());
         }
+    }
+
+    @PostMapping("/addUser")
+    public void addUser(){
+        System.out.println("add User...");
     }
 }
