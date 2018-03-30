@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-@MapperScan(value = {"com.magicabc.magicabcapp.dao"})
+//@MapperScan(value = {"com.magicabc.magicabcapp.dao"})
 @SpringBootApplication
 public class MagicabcAppApplication {
 

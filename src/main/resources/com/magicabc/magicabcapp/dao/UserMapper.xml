@@ -9,4 +9,13 @@
         SELECT userphone,username
         FROM USER
     </select>
+    <insert id="addUser" parameterType="java.util.Map">
+
+    </insert>
+    <update id="updateUser" parameterType="java.util.Map">
+
+    </update>
+    <delete id="deleteUser" parameterType="java.lang.String">
+
+    </delete>
 </mapper>
