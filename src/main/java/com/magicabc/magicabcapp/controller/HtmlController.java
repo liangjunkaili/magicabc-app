@@ -1,13 +1,12 @@
 package com.magicabc.magicabcapp.controller;
 
+import com.magicabc.magicabcapp.bean.Msg;
 import com.magicabc.magicabcapp.util.ExcelUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,10 +22,16 @@ import java.util.Map;
 @Controller
 public class HtmlController {
 
-    @GetMapping("/templates")
+    @RequestMapping("/templates")
     String test(HttpServletRequest request) {
         //逻辑处理
         request.setAttribute("key", "hello world");
+        return "index";
+    }
+    @RequestMapping("/login")
+    String login(HttpServletRequest request) {
+        //逻辑处理
+        System.out.println("login-------------");
         return "index";
     }
     @GetMapping("/share")
@@ -34,7 +39,12 @@ public class HtmlController {
         //逻辑处理
         return "share";
     }
-
+    @RequestMapping("/")
+    public String index(Model model){
+        Msg msg =  new Msg("测试标题","测试内容","额外信息，只对管理员显示");
+        model.addAttribute("msg", msg);
+        return "home";
+    }
     @GetMapping("/exportExcel")
     public void exportExcel(HttpServletRequest request, HttpServletResponse response){
         List<Map<String, Object>> list = new ArrayList<>();

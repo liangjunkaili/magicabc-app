@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magicabc.magicabcapp.dao.SysUserDao">
+    <resultMap id="userResultMap" type="com.magicabc.magicabcapp.bean.SysUser">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+    </resultMap>
+    <select id="findByUseranme" resultMap="userResultMap" parameterType="java.lang.String">
+        SELECT id,username,password
+        FROM sys_user
+        where username = #{username}
+    </select>
+</mapper>
