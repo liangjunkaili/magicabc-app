@@ -4,7 +4,7 @@ import java.util.List;
 
 public class SysUser {
 
-//    private Long id;
+    private Long id;
     private String username;
     private String password;
 //    private List<SysRole> roles;
@@ -16,14 +16,14 @@ public class SysUser {
 //    public void setRoles(List<SysRole> roles) {
 //        this.roles = roles;
 //    }
-//
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public void setUsername(String username) {
         this.username = username;
