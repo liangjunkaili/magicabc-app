@@ -26,11 +26,11 @@ public class CustomUserService implements UserDetailsService{
         }
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         //用于添加用户的权限。只要把用户权限添加到authorities 就万事大吉。
-        for(SysRole role:user.getRoles())
-        {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
-            System.out.println(role.getName());
-        }
+//        for(SysRole role:user.getRoles())
+//        {
+//            authorities.add(new SimpleGrantedAuthority(role.getName()));
+//            System.out.println(role.getName());
+//        }
         return new org.springframework.security.core.userdetails.User(user.getUsername(),
                 user.getPassword(), authorities);
     }

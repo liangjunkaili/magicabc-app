@@ -4,6 +4,7 @@ import com.magicabc.magicabcapp.service.impl.CustomUserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,15 +19,32 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/css/**").antMatchers("/js/**");
+    }
+
+    @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         System.out.println("2---------------");
-        auth.userDetailsService(userDetailsService());
+//        auth.userDetailsService(userDetailsService());
+        auth.inMemoryAuthentication().passwordEncoder(new MyPasswordEncoder())
+                .withUser("admin").password("123456").roles("USER");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         System.out.println("1---------------");
-        http.authorizeRequests().anyRequest().authenticated().and().formLogin()
-                .loginPage("/login.html").loginProcessingUrl("/templates").permitAll().and().logout().permitAll();
+        http
+                .authorizeRequests()
+                .antMatchers("/").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/welcome")
+                .permitAll()
+                .and()
+                .logout()
+                .permitAll();
     }
 }

@@ -1,6 +1,7 @@
 package com.magicabc.magicabcapp.controller;
 
 import com.magicabc.magicabcapp.bean.Msg;
+import com.magicabc.magicabcapp.bean.SysUser;
 import com.magicabc.magicabcapp.util.ExcelUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -28,11 +29,14 @@ public class HtmlController {
         request.setAttribute("key", "hello world");
         return "index";
     }
-    @RequestMapping("/login")
-    String login(HttpServletRequest request) {
-        //逻辑处理
-        System.out.println("login-------------");
-        return "index";
+    @RequestMapping(value ="/welcome", method = RequestMethod.GET)
+    String welcome() {
+        return "welcome";
+    }
+    @RequestMapping(value ="/login", method = RequestMethod.GET)
+    String login(Model model, SysUser user) {
+        model.addAttribute("user", user);
+        return "home";
     }
     @GetMapping("/share")
     String share(HttpServletRequest request) {
