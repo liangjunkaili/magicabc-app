@@ -36,14 +36,17 @@ public class HtmlController {
     @RequestMapping(value ="/login", method = RequestMethod.GET)
     String login(Model model, SysUser user) {
         model.addAttribute("user", user);
+        System.out.println(model);
+        System.out.println(user);
         return "home";
     }
     @GetMapping("/share")
     String share(HttpServletRequest request) {
         //逻辑处理
+        System.out.println("login fail...");
         return "share";
     }
-    @RequestMapping("/")
+    @RequestMapping("/logout")
     public String index(Model model){
         Msg msg =  new Msg("测试标题","测试内容","额外信息，只对管理员显示");
         model.addAttribute("msg", msg);

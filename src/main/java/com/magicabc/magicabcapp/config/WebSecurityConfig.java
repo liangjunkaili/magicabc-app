@@ -14,7 +14,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public UserDetailsService userDetailsService(){
-        System.out.println("3---------------");
         return new CustomUserService();
     }
 
@@ -25,26 +24,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        System.out.println("2---------------");
         auth.userDetailsService(userDetailsService()).passwordEncoder(new MyPasswordEncoder());
-//        auth.inMemoryAuthentication().passwordEncoder(new MyPasswordEncoder())
-//                .withUser("admin").password("123456").roles("USER");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        System.out.println("1---------------");
         http
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
+                .antMatchers("/authorize").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
                 .defaultSuccessUrl("/welcome")
+                .failureUrl("/share")
                 .permitAll()
                 .and()
                 .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/templates")
                 .permitAll();
     }
 }
