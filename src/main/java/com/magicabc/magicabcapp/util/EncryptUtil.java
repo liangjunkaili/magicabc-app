@@ -51,4 +51,13 @@ public class EncryptUtil {
         String sign = EncryptUtil.Encrypt(signTmp,"MD5").toUpperCase();
         return sign;
     }
+    public static String base64ForStr(String string){
+//        Base64.Decoder decoder = Base64.getDecoder();
+        Base64.Encoder encoder = Base64.getEncoder();
+//        decoder.decode(string);
+        return encoder.encodeToString(string.getBytes());
+    }
+    public static void main(String[] args){
+        System.out.println(EncryptUtil.Encrypt("wei","Md5"));
+    }
 }

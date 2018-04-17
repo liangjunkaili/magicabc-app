@@ -3,8 +3,15 @@ package com.magicabc.magicabcapp.controller;
 import com.magicabc.magicabcapp.bean.Msg;
 import com.magicabc.magicabcapp.bean.SysUser;
 import com.magicabc.magicabcapp.util.ExcelUtil;
+import net.sf.json.JSONObject;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,13 +41,24 @@ public class HtmlController {
         return "welcome";
     }
     @RequestMapping(value ="/login", method = RequestMethod.GET)
-    String login(Model model, SysUser user) {
-        model.addAttribute("user", user);
-        System.out.println(model);
-        System.out.println(user);
-        return "home";
+    @ResponseBody
+    JSONObject login(@AuthenticationPrincipal User user,@RequestParam(value = "logout",required = false) String logout,HttpServletRequest request,HttpServletResponse response) {
+        JSONObject jsonObject = new JSONObject();
+        if (logout != null){
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null){
+                new SecurityContextLogoutHandler().logout(request, response, auth);
+            }
+            jsonObject.put("username","");
+            jsonObject.put("authorities","");
+        }else {
+            jsonObject.put("username",user.getUsername());
+            jsonObject.put("authorities",user.getAuthorities());
+        }
+        return jsonObject;
     }
     @GetMapping("/share")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     String share(HttpServletRequest request) {
         //逻辑处理
         System.out.println("login fail...");
