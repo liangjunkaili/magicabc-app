@@ -1,7 +1,10 @@
 package com.magicabc.magicabcapp.util;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import javax.crypto.*;
+import javax.crypto.spec.DESKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
 import java.util.*;
 
 public class EncryptUtil {
@@ -59,5 +62,55 @@ public class EncryptUtil {
     }
     public static void main(String[] args){
         System.out.println(EncryptUtil.Encrypt("wei","Md5"));
+    }
+
+    public static final String KEY_ALGORITHM = "DES";
+    public static final String CIPHER_ALGORITHM = "DES/ECB/PKCS5Padding";
+    /**
+     * 生成密钥
+     */
+    public static byte[] initKey() throws NoSuchAlgorithmException {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance(KEY_ALGORITHM);
+        keyGenerator.init(56);
+        SecretKey secretKey = keyGenerator.generateKey();
+        return secretKey.getEncoded();
+    }
+    public static String initKeyString() throws NoSuchAlgorithmException {
+        return org.apache.commons.codec.binary.Base64.encodeBase64String(initKey());
+    }
+    /**
+     * 还原密钥
+     */
+    public static Key toKey(byte[] key) throws NoSuchAlgorithmException, InvalidKeyException, InvalidKeySpecException {
+        DESKeySpec desKeySpec = new DESKeySpec(key);
+        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(KEY_ALGORITHM);
+        SecretKey secretKey = keyFactory.generateSecret(desKeySpec);
+//        SecretKey secretKey1 = new SecretKeySpec(key,KEY_ALGORITHM);
+        return secretKey;
+    }
+    /**
+     **加密
+     */
+    public static byte[] encrypt(byte[] data,byte[] key) throws NoSuchAlgorithmException, InvalidKeyException, InvalidKeySpecException, NoSuchPaddingException, BadPaddingException, IllegalBlockSizeException {
+        Key k = toKey(key);
+        Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
+        cipher.init(Cipher.ENCRYPT_MODE,k);
+        return cipher.doFinal(data);
+    }
+    /**
+     * 解密
+     */
+    public static byte[] decrypt(byte[] data,byte[] key) throws NoSuchAlgorithmException, InvalidKeyException, InvalidKeySpecException, NoSuchPaddingException, BadPaddingException, IllegalBlockSizeException {
+        Key k = toKey(key);
+        Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
+        cipher.init(Cipher.DECRYPT_MODE,k);
+        return cipher.doFinal(data);
+    }
+    /**
+     * 初始化盐
+     */
+    public static byte[] initSalt(){
+        SecureRandom random = new SecureRandom();
+        return random.generateSeed(8);
     }
 }
