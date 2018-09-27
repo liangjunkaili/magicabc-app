@@ -10,8 +10,12 @@ import java.util.Date;
 import java.util.List;
 
 public class RedisUtil {
+
+    private static Jedis jedis = null;
     public static void main(String[] args){
-        eval();
+//        eval();
+        jedisPool();
+        info();
     }
 
     private void singleJedis(){
@@ -44,7 +48,7 @@ public class RedisUtil {
         System.out.print(jedis.zadd("myzset",33,"james"));
         System.out.print(jedis.zrangeWithScores("myzset",0,-1));*/
     }
-    private void jedisPool(){
+    private static void jedisPool(){
         GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
         poolConfig.setMaxTotal(GenericObjectPoolConfig.DEFAULT_MAX_TOTAL*5);
         poolConfig.setMaxIdle(GenericObjectPoolConfig.DEFAULT_MAX_IDLE*3);
@@ -52,19 +56,22 @@ public class RedisUtil {
         poolConfig.setJmxEnabled(true);
         poolConfig.setMaxWaitMillis(3000);
         JedisPool jedisPool = new JedisPool(poolConfig,"127.0.0.1",6379);
-        Jedis jedis = null;
-        try {
-            jedis = jedisPool.getResource();
-            jedis.get("hello");
-        }catch (Exception e){
-            System.out.print(e.getMessage());
+        jedis = jedisPool.getResource();
+    }
+
+    public static void info(){
+        try{
+//            String infos = jedis.info();
+            String infos = jedis.info("Server");
+            System.out.println(infos);
+        }catch (Exception e) {
+
         }finally {
             if (jedis!=null){
                 jedis.close();
             }
         }
     }
-
     public void mdel(List<String> keys){
         Jedis jedis = new Jedis("127.0.0.1",6379);
         jedis.auth("liangjun");
