@@ -61,7 +61,7 @@ public class EncryptUtil {
         return encoder.encodeToString(string.getBytes());
     }
     public static void main(String[] args){
-        System.out.println(EncryptUtil.Encrypt("wei","Md5"));
+        System.out.println(EncryptUtil.Encrypt("admin","Md5"));
     }
 
     public static final String KEY_ALGORITHM = "DES";
